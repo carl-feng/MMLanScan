@@ -278,7 +278,7 @@
 				TargetAttributes = {
 					274DE7681DCF2C6C00C6E09A = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = JSY962FCU8;
+						DevelopmentTeam = SD9D3969GY;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 					};
@@ -457,7 +457,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = JSY962FCU8;
+				DEVELOPMENT_TEAM = SD9D3969GY;
 				INFOPLIST_FILE = MMLanScanSwiftDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.miksoft.MMLanScanSwiftDemo;
@@ -476,7 +476,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = JSY962FCU8;
+				DEVELOPMENT_TEAM = SD9D3969GY;
 				INFOPLIST_FILE = MMLanScanSwiftDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.miksoft.MMLanScanSwiftDemo;

@@ -109,6 +109,10 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
         self.showAlert(title: "Failed to scan", message: "Please make sure that you are connected to a WiFi before starting LAN Scan")
     }
     
+    func mainPresenterReloadTableData() {
+        self.tableV.reloadData()
+    }
+    
     //MARK: - Alert Controller
     func showAlert(title:String, message: String) {
     
@@ -143,6 +147,8 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
         cell.macAddressLabel.text = device.macAddress
         cell.hostnameLabel.text = device.hostname
         cell.brandLabel.text = device.brand
+        
+        cell.hostnameLabel.textColor = UIColor.blue
         
         return cell
     }

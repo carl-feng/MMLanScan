@@ -13,6 +13,7 @@ protocol MainPresenterDelegate {
     func mainPresenterIPSearchFinished()
     func mainPresenterIPSearchCancelled()
     func mainPresenterIPSearchFailed()
+    func mainPresenterReloadTableData()
 }
 
 class MainPresenter: NSObject, MMLANScannerDelegate {
@@ -61,6 +62,7 @@ class MainPresenter: NSObject, MMLANScannerDelegate {
         }
         else {
             
+            self.connectedDevices.removeAll()
             self.isScanRunning = true
             self.lanScanner.start()
         }
@@ -84,6 +86,14 @@ class MainPresenter: NSObject, MMLANScannerDelegate {
     func lanScanDidFindNewDevice(_ device: Device!) {
         //Adding the found device in the array
         self.connectedDevices?.append(device)
+    }
+    
+    func lanScanDidUpdate(_ device: Device!) {
+        //print("lanScanDidUpdate device ip = \(device.ipAddress), hostname = \(device.hostname)")
+        self.connectedDevices?.filter({$0.ipAddress == device.ipAddress}).first?.hostname = device.hostname
+        DispatchQueue.main.async {
+            self.delegate?.mainPresenterReloadTableData()
+        }
     }
     
     func lanScanDidFailedToScan() {

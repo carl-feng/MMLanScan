@@ -35,6 +35,23 @@ MMLanScannerStatus;
  */
 - (void)lanScanDidFindNewDevice:(Device*)device;
 
+@required
+/*!
+ @brief This delegate is called each time that MMLANSCanner need to update a device according to ip
+ @param device The device object that contains the IP Address and hostname
+ @code
+ -(void)lanScanDidUpdateDevice:(Device*)device{
+ 
+ //Check if the Device is already added
+ if (![self.connectedDevices containsObject:device]) {
+ 
+ [self.connectedDevices addObject:device];
+ }
+ }
+ @endcode
+ */
+- (void)lanScanDidUpdateDevice:(Device*)device;
+
 /*!
  @brief This delegate is called when the scan has finished
  
@@ -70,7 +87,7 @@ MMLanScannerStatus;
 @end
 
 #pragma mark - Public methods
-@interface MMLANScanner : NSObject
+@interface MMLANScanner : NSObject <NSNetServiceBrowserDelegate, NSNetServiceDelegate>
 
 @property(nonatomic,weak) id<MMLANScannerDelegate> delegate;
 /*!
