@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		213A87FB1EC46AE0008C0ED8 /* netbiosNS.m in Sources */ = {isa = PBXBuildFile; fileRef = 213A87F11EC46AE0008C0ED8 /* netbiosNS.m */; };
+		213A87FC1EC46AE0008C0ED8 /* netbiosQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 213A87F41EC46AE0008C0ED8 /* netbiosQuery.m */; };
+		213A87FD1EC46AE0008C0ED8 /* netbiosSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 213A87F71EC46AE0008C0ED8 /* netbiosSession.m */; };
+		213A87FE1EC46AE0008C0ED8 /* netbiosUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 213A87FA1EC46AE0008C0ED8 /* netbiosUtils.m */; };
 		274DE76D1DCF2C6C00C6E09A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274DE76C1DCF2C6C00C6E09A /* AppDelegate.swift */; };
 		274DE7721DCF2C6C00C6E09A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 274DE7701DCF2C6C00C6E09A /* Main.storyboard */; };
 		274DE7741DCF2C6C00C6E09A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 274DE7731DCF2C6C00C6E09A /* Assets.xcassets */; };
@@ -26,6 +30,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		213A87ED1EC46AE0008C0ED8 /* netbios_defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netbios_defs.h; sourceTree = "<group>"; };
+		213A87EE1EC46AE0008C0ED8 /* netbiosHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = netbiosHeader.h; path = ../../MMLanScan/netbios/netbiosHeader.h; sourceTree = "<group>"; };
+		213A87F01EC46AE0008C0ED8 /* netbiosNS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netbiosNS.h; sourceTree = "<group>"; };
+		213A87F11EC46AE0008C0ED8 /* netbiosNS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = netbiosNS.m; sourceTree = "<group>"; };
+		213A87F31EC46AE0008C0ED8 /* netbiosQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netbiosQuery.h; sourceTree = "<group>"; };
+		213A87F41EC46AE0008C0ED8 /* netbiosQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = netbiosQuery.m; sourceTree = "<group>"; };
+		213A87F61EC46AE0008C0ED8 /* netbiosSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netbiosSession.h; sourceTree = "<group>"; };
+		213A87F71EC46AE0008C0ED8 /* netbiosSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = netbiosSession.m; sourceTree = "<group>"; };
+		213A87F91EC46AE0008C0ED8 /* netbiosUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netbiosUtils.h; sourceTree = "<group>"; };
+		213A87FA1EC46AE0008C0ED8 /* netbiosUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = netbiosUtils.m; sourceTree = "<group>"; };
+		213A87FF1EC46B31008C0ED8 /* bdsm_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bdsm_common.h; sourceTree = "<group>"; };
 		270DD9F91E4653A20041A61B /* if_arp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = if_arp.h; sourceTree = "<group>"; };
 		270DD9FA1E4653A20041A61B /* if_ether.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = if_ether.h; sourceTree = "<group>"; };
 		270DD9FB1E4653A20041A61B /* route.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = route.h; sourceTree = "<group>"; };
@@ -69,6 +84,69 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		213A87EB1EC46AB9008C0ED8 /* NetBios */ = {
+			isa = PBXGroup;
+			children = (
+				213A87EC1EC46AE0008C0ED8 /* netbios_defs */,
+				213A87EE1EC46AE0008C0ED8 /* netbiosHeader.h */,
+				213A87EF1EC46AE0008C0ED8 /* netbiosNS */,
+				213A87F21EC46AE0008C0ED8 /* netbiosQuery */,
+				213A87F51EC46AE0008C0ED8 /* netbiosSession */,
+				213A87F81EC46AE0008C0ED8 /* netbiosUtils */,
+			);
+			name = NetBios;
+			sourceTree = "<group>";
+		};
+		213A87EC1EC46AE0008C0ED8 /* netbios_defs */ = {
+			isa = PBXGroup;
+			children = (
+				213A87FF1EC46B31008C0ED8 /* bdsm_common.h */,
+				213A87ED1EC46AE0008C0ED8 /* netbios_defs.h */,
+			);
+			name = netbios_defs;
+			path = ../../MMLanScan/netbios/netbios_defs;
+			sourceTree = "<group>";
+		};
+		213A87EF1EC46AE0008C0ED8 /* netbiosNS */ = {
+			isa = PBXGroup;
+			children = (
+				213A87F01EC46AE0008C0ED8 /* netbiosNS.h */,
+				213A87F11EC46AE0008C0ED8 /* netbiosNS.m */,
+			);
+			name = netbiosNS;
+			path = ../../MMLanScan/netbios/netbiosNS;
+			sourceTree = "<group>";
+		};
+		213A87F21EC46AE0008C0ED8 /* netbiosQuery */ = {
+			isa = PBXGroup;
+			children = (
+				213A87F31EC46AE0008C0ED8 /* netbiosQuery.h */,
+				213A87F41EC46AE0008C0ED8 /* netbiosQuery.m */,
+			);
+			name = netbiosQuery;
+			path = ../../MMLanScan/netbios/netbiosQuery;
+			sourceTree = "<group>";
+		};
+		213A87F51EC46AE0008C0ED8 /* netbiosSession */ = {
+			isa = PBXGroup;
+			children = (
+				213A87F61EC46AE0008C0ED8 /* netbiosSession.h */,
+				213A87F71EC46AE0008C0ED8 /* netbiosSession.m */,
+			);
+			name = netbiosSession;
+			path = ../../MMLanScan/netbios/netbiosSession;
+			sourceTree = "<group>";
+		};
+		213A87F81EC46AE0008C0ED8 /* netbiosUtils */ = {
+			isa = PBXGroup;
+			children = (
+				213A87F91EC46AE0008C0ED8 /* netbiosUtils.h */,
+				213A87FA1EC46AE0008C0ED8 /* netbiosUtils.m */,
+			);
+			name = netbiosUtils;
+			path = ../../MMLanScan/netbios/netbiosUtils;
+			sourceTree = "<group>";
+		};
 		270DD9F71E4653500041A61B /* MacFinder */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +247,7 @@
 		274DE79F1DCF2D5000C6E09A /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				213A87EB1EC46AB9008C0ED8 /* NetBios */,
 				270DDA021E4656F20041A61B /* Data */,
 				274DE7A01DCF2D5800C6E09A /* LAN Scan Libs */,
 				274DE7A11DCF2D7900C6E09A /* Operations */,
@@ -322,6 +401,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				274DE7941DCF2CD900C6E09A /* Device.m in Sources */,
+				213A87FC1EC46AE0008C0ED8 /* netbiosQuery.m in Sources */,
 				274DE7A51DCF2DE200C6E09A /* MainVC.swift in Sources */,
 				274DE7991DCF2CDA00C6E09A /* NetworkCalculator.m in Sources */,
 				274DE79B1DCF2CDA00C6E09A /* SimplePing.m in Sources */,
@@ -330,8 +410,11 @@
 				274DE7AC1DCF3AF400C6E09A /* MMLANScanner.m in Sources */,
 				274DE7961DCF2CD900C6E09A /* MacFinder.m in Sources */,
 				274DE7A71DCF2E1200C6E09A /* MainPresenter.swift in Sources */,
+				213A87FB1EC46AE0008C0ED8 /* netbiosNS.m in Sources */,
 				274DE76D1DCF2C6C00C6E09A /* AppDelegate.swift in Sources */,
+				213A87FD1EC46AE0008C0ED8 /* netbiosSession.m in Sources */,
 				274DE79A1DCF2CDA00C6E09A /* PingOperation.m in Sources */,
+				213A87FE1EC46AE0008C0ED8 /* netbiosUtils.m in Sources */,
 				274DE7F21DCFE52200C6E09A /* DeviceCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

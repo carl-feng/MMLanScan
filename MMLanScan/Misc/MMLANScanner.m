@@ -11,6 +11,7 @@
 #import "MACOperation.h"
 #import "MacFinder.h"
 #import "Device.h"
+#import "netbiosHeader.h"
 
 @interface MMLANScanner ()
 @property (nonatomic,strong) Device *device;
@@ -20,19 +21,19 @@
 @property (nonatomic,strong) NSOperationQueue *pingQueue;
 @property (nonatomic,strong) NSOperationQueue *macQueue;
 @property(nonatomic,assign,readwrite)BOOL isScanning;
+
+@property (nonatomic,strong) NSNetServiceBrowser *serviceBrowser;
+@property (nonatomic,strong) NSMutableArray<NSString *> *serviceNames;
+@property (nonatomic,strong) NSMutableArray<Device *> *devices;
+@property (nonatomic,strong) NSMutableArray<Device *> *appledevs;
+@property (nonatomic,strong) NSLock *appleDevsLock;
+@property (nonatomic,strong) NSRecursiveLock *rsLock;
+@property (nonatomic,assign) netbios_ns *nameService;
 @end
 
 @implementation MMLANScanner {
     BOOL isFinished;
     BOOL isCancelled;
-    
-    
-    NSNetServiceBrowser *_serviceBrowser;
-    NSMutableArray<NSString *> * _serviceNames;
-    NSMutableArray<Device *> * _devices;
-    NSMutableArray<Device *> *_appledevs;
-    NSLock *_appleDevsLock;
-    NSRecursiveLock *_rsLock;
 }
 
 #pragma mark - Initialization method
@@ -69,7 +70,7 @@
         _appledevs = [[NSMutableArray alloc] init];
         _appleDevsLock = [[NSLock alloc] init];
         _rsLock = [[NSRecursiveLock alloc] init];
-
+        
     }
     
     return self;
@@ -101,6 +102,14 @@
     [_serviceNames removeAllObjects];
     [_appledevs removeAllObjects];
     [_appleDevsLock unlock];
+    
+    netbios_ns_discover_callbacks callbacks;
+    callbacks.p_opaque = (__bridge void *)(self);
+    callbacks.pf_on_entry_added = on_entry_added;
+    callbacks.pf_on_entry_removed = on_entry_removed;
+    
+    _nameService = netbios_ns_new();
+    netbios_ns_discover_start(_nameService, 4, &callbacks);
     
     //Getting the available IPs to ping based on our network subnet.
     self.ipsToPing = [LANProperties getAllHostsForIP:self.device.ipAddress andSubnet:self.device.subnetMask];
@@ -174,6 +183,11 @@
     [self.macQueue waitUntilAllOperationsAreFinished];
     self.isScanning = NO;
     [_serviceBrowser stop];
+    
+    if(_nameService) {
+        netbios_ns_discover_stop(_nameService);
+        netbios_ns_destroy(_nameService);
+    }
 }
 
 - (NSString *)_serviceIdentifier:(NSNetService *)service {
@@ -199,8 +213,7 @@
     
     Device* device = [[Device alloc] init];
     device.ipAddress = ip;
-    device.hostname = [sender.hostName stringByReplacingOccurrencesOfString:@".local." withString:@""];
-    //NSLog(@"_appledevs = %@", _appledevs);
+    device.hostname = sender.hostName;//[sender.hostName stringByReplacingOccurrencesOfString:@".local." withString:@""];
     [_appleDevsLock lock];
     [_appledevs addObject:device];
 
@@ -261,7 +274,6 @@
     
     if([@"." isEqualToString:service.domain]) {
         dispatch_async (dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
-            
             NSString *serviceType = [self _serviceIdentifier:service];
             if([serviceTypes containsObject:serviceType])
             {
@@ -317,6 +329,8 @@
             }
             [_appleDevsLock unlock];
             
+            [self stop];
+            
             isFinished=YES;
             self.isScanning = NO;
             //Checks if is cancelled to sent the appropriate message to delegate
@@ -331,6 +345,48 @@
         }
     }
 }
+
+#pragma mark - NetBIOS Name Service Discovery Callback Functions -
+static void on_entry_added(void *p_opaque, netbios_ns_entry *entry)
+{
+    @autoreleasepool {
+        
+        __weak MMLANScanner *funcSelf = (__bridge MMLANScanner *)(p_opaque);
+        if (funcSelf.appledevs == nil) {
+            return;
+        }
+        
+        NSString *_name = [NSString stringWithCString:netbios_ns_entry_name(entry) encoding:NSUTF8StringEncoding];
+        NSString *_group = [NSString stringWithCString:netbios_ns_entry_group(entry) encoding:NSUTF8StringEncoding];
+        NSString *_ipAddress = [NSString stringWithCString:netbios_ns_entry_ip(entry) encoding:NSUTF8StringEncoding];
+        NSLog(@"name = %@, group = %@, ip = %@", _name, _group, _ipAddress);
+        //return;
+        Device* device = [[Device alloc] init];
+        device.ipAddress = _ipAddress;
+        device.hostname = [_name stringByAppendingString: @".netbios."];
+        [funcSelf.appleDevsLock lock];
+        [funcSelf.appledevs addObject:device];
+        
+        for (Device * appledev in funcSelf.appledevs) {
+            for (Device * dev in funcSelf.devices) {
+                if([dev.ipAddress isEqualToString:appledev.ipAddress]) {
+                    dev.hostname = appledev.hostname;
+                    [funcSelf.delegate lanScanDidUpdateDevice:dev];
+                    break;
+                }
+            }
+        }
+        [funcSelf.appleDevsLock unlock];
+    }
+}
+
+static void on_entry_removed(void *p_opaque, netbios_ns_entry *entry)
+{
+    @autoreleasepool {
+        
+    }
+}
+
 #pragma mark - Dealloc
 -(void)dealloc {
     //Removing the observer on dealloc

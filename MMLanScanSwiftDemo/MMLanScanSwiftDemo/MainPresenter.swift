@@ -90,10 +90,14 @@ class MainPresenter: NSObject, MMLANScannerDelegate {
     
     func lanScanDidUpdate(_ device: Device!) {
         //print("lanScanDidUpdate device ip = \(device.ipAddress), hostname = \(device.hostname)")
-        self.connectedDevices?.filter({$0.ipAddress == device.ipAddress}).first?.hostname = device.hostname
-        DispatchQueue.main.async {
-            self.delegate?.mainPresenterReloadTableData()
+        let dev = self.connectedDevices?.filter({$0.ipAddress == device.ipAddress}).first
+        if(dev?.hostname == nil) {
+            dev?.hostname = device.hostname
+            DispatchQueue.main.async {
+                self.delegate?.mainPresenterReloadTableData()
+            }
         }
+        
     }
     
     func lanScanDidFailedToScan() {

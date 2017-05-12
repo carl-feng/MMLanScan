@@ -16,22 +16,22 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var tableVTopContraint: NSLayoutConstraint!
     @IBOutlet weak var scanButton: UIBarButtonItem!
-  
+    
     private var myContext = 0
     var presenter: MainPresenter!
     
     //MARK: - On Load Methods
     override func viewDidLoad() {
-       
+        
         super.viewDidLoad()
-
+        
         //Init presenter. Presenter is responsible for providing the business logic of the MainVC (MVVM)
         self.presenter = MainPresenter(delegate:self)
         
         //Add observers to monitor specific values on presenter. On change of those values MainVC UI will be updated
         self.addObserversForKVO()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         
         //Setting the title of the navigation bar with the SSID of the WiFi
@@ -50,7 +50,7 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
         self.presenter.addObserver(self, forKeyPath: "progressValue", options: .new, context:&myContext)
         self.presenter.addObserver(self, forKeyPath: "isScanRunning", options: .new, context:&myContext)
     }
-  
+    
     func removeObserversForKVO ()->Void {
         
         self.presenter.removeObserver(self, forKeyPath: "connectedDevices")
@@ -77,16 +77,16 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
-
-        
+    
+    
     func hideProgressBar()->Void {
-            
+        
         UIView.animate(withDuration: 0.5, animations: {
             
             self.tableVTopContraint.constant = 0
             self.view.layoutIfNeeded()
         }, completion: nil)
-            
+        
     }
     
     //MARK: - Presenter Delegates
@@ -98,7 +98,7 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
     }
     
     func mainPresenterIPSearchCancelled() {
-
+        
         self.hideProgressBar()
         self.tableV.reloadData()
     }
@@ -115,9 +115,9 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
     
     //MARK: - Alert Controller
     func showAlert(title:String, message: String) {
-    
+        
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-     
+        
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.default) { (result : UIAlertAction) -> Void in}
         
         alertController.addAction(okAction)
@@ -138,17 +138,27 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-       
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "DeviceCell", for: indexPath) as! DeviceCell
         
-        let device = self.presenter.connectedDevices[indexPath.row] 
+        let device = self.presenter.connectedDevices[indexPath.row]
+        
+        cell.hostnameLabel.textColor = UIColor.blue
+        
+        if(device.hostname != nil) {
+            if(device.hostname.contains(".local.")) {
+                cell.hostnameLabel.textColor = UIColor.red
+                //device.hostname = device.hostname.replacingOccurrences(of: ".local.", with: "")
+            } else if(device.hostname.contains(".netbios.")) {
+                cell.hostnameLabel.textColor = UIColor.green
+                //device.hostname = device.hostname.replacingOccurrences(of: ".netbios.", with: "")
+            }
+        }
         
         cell.ipLabel.text = device.ipAddress
         cell.macAddressLabel.text = device.macAddress
         cell.hostnameLabel.text = device.hostname
         cell.brandLabel.text = device.brand
-        
-        cell.hostnameLabel.textColor = UIColor.blue
         
         return cell
     }
@@ -156,9 +166,9 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
     //MARK: - KVO
     //This is the KVO function that handles changes on MainPresenter
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-
-        if (context == &myContext) {
         
+        if (context == &myContext) {
+            
             switch keyPath! {
             case "connectedDevices":
                 self.tableV.reloadData()
@@ -181,13 +191,13 @@ class MainVC: UIViewController, MainPresenterDelegate, UITableViewDelegate, UITa
     }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
